@@ -5,8 +5,10 @@ typedef struct arvore Arvore;
 
 Arvore* BST_init();
 
-void add_node(Arvore *a, int chave);
+Arvore* add_node(Arvore *a, int chave);
 
 void destruct_BST(Arvore *a);
+
+int BST_height(Arvore *a);
 
 #endif

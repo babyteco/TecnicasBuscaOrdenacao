@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct arvore {
+typedef struct arvore Arvore;
+
+struct arvore {
     int chave;
     Arvore *dir;
     Arvore *esq;
-} Arvore;
+};
 
 Arvore* BST_init(){
     return NULL;
@@ -13,17 +15,17 @@ Arvore* BST_init(){
 
 Arvore* add_node(Arvore *a, int chave){
     if (a == NULL){
-        Arvore *new = (Arvore*) malloc(sizeof(Arvore));
-        new->chave = chave;
-        new->dir = NULL;
-        new->esq = NULL;
-        a = new;
+        a = (Arvore*) malloc(sizeof(Arvore));
+        a->chave = chave;
+        a->dir = NULL;
+        a->esq = NULL;
         return a;
     }
 
-    if (chave < a->chave) return add_node(a->esq, chave);
-    else if (chave > a->chave) return add_node(a->dir, chave);
-    else return a;
+    if (chave < a->chave) a->esq = add_node(a->esq, chave);
+    else if (chave > a->chave) a->dir = add_node(a->dir, chave);
+    
+    return a;
 }
 
 void destruct_BST(Arvore *a){
@@ -32,13 +34,15 @@ void destruct_BST(Arvore *a){
         destruct_BST(a->esq);
         free(a);    
     }
-
-    return NULL;
 }
 
 int BST_height(Arvore *a){
-    if (a == NULL) return 0;
-    
-    int qtd =  0;
-    
+    if (a == NULL) return -1;
+    else {
+        int esq = BST_height(a->esq);
+        int dir = BST_height(a->dir);
+
+        if (esq > dir) return esq + 1;
+        else return dir + 1;
+    }
 }
